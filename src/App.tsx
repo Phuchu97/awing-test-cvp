@@ -31,7 +31,13 @@ function App() {
   // Chuyển tab trong Subcampaign
   const handleSelectSubCampaign = async (id: number) => {
     setListSubcampaign((prevList) =>
-      prevList.map((sub) => sub.id === subCampaign.id ? subCampaign : sub)
+      prevList.map((sub) => {
+        if (sub.id === subCampaign.id) {
+          const checkAds = sub.ads.find((item) => item.name == '' || item.quantity == 0);
+          return (isSubmit && (sub.name == '' || checkAds || sub.ads.length == 0))? { ...subCampaign, isError: true } : subCampaign;
+        }
+        return sub;
+      })
     );
     const newSubCampaign = listSubcampaign.filter(item => item.id === id)[0];
     setSubCampaign(newSubCampaign);
